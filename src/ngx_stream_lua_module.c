@@ -299,6 +299,13 @@ static ngx_command_t  ngx_stream_lua_commands[] = {
 
 #endif  /* NGX_STREAM_SSL */
 
+      { ngx_string("lcache_timer_by_lua_file"),
+      NGX_STREAM_MAIN_CONF|NGX_CONF_TAKE2,
+      ngx_stream_lua_lcache_timer_by_lua,
+      NGX_STREAM_MAIN_CONF_OFFSET,
+      offsetof(ngx_stream_lua_main_conf_t, caches),
+      (void *) ngx_stream_lcache_timer_manager },
+
       ngx_null_command
 };
 
