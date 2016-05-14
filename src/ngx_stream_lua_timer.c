@@ -1126,13 +1126,6 @@ ngx_stream_lua_mgr_timer_by_lua(ngx_conf_t *cf, ngx_command_t *cmd,
 
     dd("enter");
 
-    timer->path->manager = (ngx_path_manager_pt)cmd->post;
-    timer->path->data = timer;
-    timer->path->conf_file = cf->conf_file->file.name.data;
-    timer->path->line = cf->conf_file->line;
-    timer->lmcf = lmcf;
-    timer->log = cf->log;
-
     value = cf->args->elts;
     if (value[1].len == 0) {
         ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
@@ -1148,6 +1141,18 @@ ngx_stream_lua_mgr_timer_by_lua(ngx_conf_t *cf, ngx_command_t *cmd,
                            "invalid manager timer timer_secs value \"%V\"", &value[2]);
         return NGX_CONF_ERROR;
     }
+
+    timer->path->name = value[1];
+    if (timer->path->name.data[timer->path->name.len - 1] == '/') {
+        timer->path->name.len--;
+    }
+
+    timer->path->manager = (ngx_path_manager_pt)cmd->post;
+    timer->path->data = timer;
+    timer->path->conf_file = cf->conf_file->file.name.data;
+    timer->path->line = cf->conf_file->line;
+    timer->lmcf = lmcf;
+    timer->log = cf->log;
 
     s.len = value[2].len;
     s.data = value[2].data;

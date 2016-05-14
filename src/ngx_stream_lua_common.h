@@ -389,14 +389,14 @@ struct ngx_stream_lua_ctx_s {
 
 typedef struct ngx_stream_lua_mgr_timer_s ngx_stream_lua_mgr_timer_t;
 
-typedef struct 
+struct ngx_stream_lua_mgr_timer_s
 {
     ngx_path_t                  *path;
     ngx_stream_lua_main_conf_t  *lmcf;
     ngx_log_t                   *log;
     ngx_str_t                    src_name;
     ngx_msec_t                   timer_secs;
-} ngx_stream_lua_mgr_timer_s;
+};
 
 extern ngx_module_t ngx_stream_lua_module;
 
