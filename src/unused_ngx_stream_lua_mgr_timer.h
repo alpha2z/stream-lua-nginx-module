@@ -11,9 +11,7 @@
 
 #include "ngx_stream_lua_common.h"
 
-char * ngx_stream_lua_lcache_timer_by_lua(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
-
-time_t ngx_stream_lcache_timer_manager(void *data);
+char * ngx_stream_lua_mgr_timer_by_lua(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
 
 
 #endif /* _NGX_STREAM_LUA_WORKER_H_INCLUDED_ */

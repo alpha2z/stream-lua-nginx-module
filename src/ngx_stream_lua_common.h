@@ -155,7 +155,7 @@ struct ngx_stream_lua_main_conf_s {
     unsigned                             requires_access:1;
     unsigned                             requires_shm:1;
 
-    ngx_array_t                          caches;
+    ngx_array_t                         *timers;
 };
 
 
