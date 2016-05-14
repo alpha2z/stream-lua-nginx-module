@@ -387,6 +387,8 @@ struct ngx_stream_lua_ctx_s {
     unsigned                   eof:1;
 };
 
+typedef struct ngx_stream_lua_mgr_timer_s ngx_stream_lua_mgr_timer_t;
+
 typedef struct 
 {
     ngx_path_t                  *path;
@@ -394,7 +396,7 @@ typedef struct
     ngx_log_t                   *log;
     ngx_str_t                    src_name;
     ngx_msec_t                   timer_secs;
-} ngx_stream_lua_mgr_timer_t;
+} ngx_stream_lua_mgr_timer_s;
 
 extern ngx_module_t ngx_stream_lua_module;
 
