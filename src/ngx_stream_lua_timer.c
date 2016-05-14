@@ -14,16 +14,6 @@
 #include "ngx_stream_lua_util.h"
 #include "ngx_stream_lua_contentby.h"
 
-
-typedef struct 
-{
-    ngx_path_t path;
-    ngx_stream_lua_main_conf_t lmcf;
-    ngx_log_t log;
-    ngx_str_t src_name;
-    ngx_msec_t timer_secs;
-} ngx_stream_lua_mgr_timer_t;
-
 typedef struct {
     void        **main_conf;
     void        **srv_conf;
@@ -1096,7 +1086,7 @@ ngx_stream_lua_mgr_timer(void *data)
     ngx_int_t                    rc;
     lua_State                    *L = lmcf->lua;
 
-    status = luaL_loadfile(L, (char *) lmcf->src_name.data)
+    status = luaL_loadfile(L, (char *) timer->src_name.data)
              || ngx_stream_lua_do_call(log, L);
 
     rc = ngx_stream_lua_report(log, L, status, "lua_mgr_timer");
@@ -1113,30 +1103,24 @@ char *
 ngx_stream_lua_mgr_timer_by_lua(ngx_conf_t *cf, ngx_command_t *cmd,
     void *conf)
 {
-    u_char                      *name;
+    // u_char                      *name;
     ngx_str_t                   *value;
     ngx_stream_lua_main_conf_t  *lmcf = conf;
     ngx_stream_lua_mgr_timer_t  *timer;
-    ngx_stream_lua_mgr_timer_t  *te;
+    ngx_stream_lua_mgr_timer_t **te;
     ngx_str_t                    s;
 
-    if (lmcf->timers == NULL) {
-        lmcf->timers = ngx_palloc(cf->pool, sizeof(ngx_array_t));
-        if (lmcf->timers == NULL) {
-            return NGX_CONF_ERROR;
-        }
-
-        if (ngx_array_init(lmcf->timers, cf->pool, 1024,
-                           sizeof(ngx_stream_lua_mgr_timer_t *))
-            != NGX_OK) {
-            return NGX_CONF_ERROR;
-        }
-    }
-    
     timer = ngx_pcalloc(cf->pool, sizeof(ngx_stream_lua_mgr_timer_t));
     if (timer == NULL) {
         ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
-                           "malloc ngx_stream_lua_mgr_timer_t failed");
+               "malloc ngx_stream_lua_mgr_timer_t failed");
+        return NGX_CONF_ERROR;
+    }
+
+    timer->path = ngx_pcalloc(cf->pool, sizeof(ngx_path_t));
+    if (timer->path == NULL) {
+        ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
+               "malloc ngx_stream_lua_mgr_timer_t path failed");
         return NGX_CONF_ERROR;
     }
 
@@ -1171,7 +1155,7 @@ ngx_stream_lua_mgr_timer_by_lua(ngx_conf_t *cf, ngx_command_t *cmd,
     timer->timer_secs = ngx_parse_time(&s, 0);
     if (timer->timer_secs == (ngx_msec_t) NGX_ERROR) {
         ngx_conf_log_error(NGX_LOG_EMERG, cf, 0,
-                   "invalid timer_secs value \"%V\"", &value[i]);
+                   "invalid timer_secs value \"%V\"", &value[2]);
         return NGX_CONF_ERROR;
     }
 
@@ -1179,7 +1163,7 @@ ngx_stream_lua_mgr_timer_by_lua(ngx_conf_t *cf, ngx_command_t *cmd,
         return NGX_CONF_ERROR;
     }
 
-    te = ngx_array_push(lmcf->timers);
+    te = ngx_array_push(&lmcf->timers);
     if (te == NULL) {
         return NGX_CONF_ERROR;
     }

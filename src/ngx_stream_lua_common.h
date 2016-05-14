@@ -155,7 +155,7 @@ struct ngx_stream_lua_main_conf_s {
     unsigned                             requires_access:1;
     unsigned                             requires_shm:1;
 
-    ngx_array_t                         *timers;
+    ngx_array_t                          timers;
 };
 
 
@@ -387,6 +387,14 @@ struct ngx_stream_lua_ctx_s {
     unsigned                   eof:1;
 };
 
+typedef struct 
+{
+    ngx_path_t                  *path;
+    ngx_stream_lua_main_conf_t  *lmcf;
+    ngx_log_t                   *log;
+    ngx_str_t                    src_name;
+    ngx_msec_t                   timer_secs;
+} ngx_stream_lua_mgr_timer_t;
 
 extern ngx_module_t ngx_stream_lua_module;
 

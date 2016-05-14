@@ -18,6 +18,7 @@
 #include "ngx_stream_lua_initby.h"
 #include "ngx_stream_lua_initworkerby.h"
 #include "ngx_stream_lua_util.h"
+#include "ngx_stream_lua_timer.h"
 
 
 static void *ngx_stream_lua_create_srv_conf(ngx_conf_t *cf);
@@ -304,7 +305,7 @@ static ngx_command_t  ngx_stream_lua_commands[] = {
       ngx_stream_lua_mgr_timer_by_lua,
       NGX_STREAM_MAIN_CONF_OFFSET,
       0,
-      (void *) ngx_stream_lua_mgr_timer},
+      NULL},
 
       ngx_null_command
 };
@@ -393,6 +394,11 @@ ngx_stream_lua_create_main_conf(ngx_conf_t *cf)
      * ngx_stream_lua_semaphore_mm_block_t, one is enough, so it is 4095
      */
     mm->num_per_block = 4095;
+
+    if (ngx_array_init(&lmcf->timers, cf->pool, 4,
+          sizeof(ngx_stream_lua_mgr_timer_t *)) != NGX_OK) {
+        return NULL;
+    }
 
     dd("nginx Lua module main config structure initialized!");
 
