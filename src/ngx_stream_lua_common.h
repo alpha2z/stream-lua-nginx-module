@@ -393,9 +393,11 @@ struct ngx_stream_lua_mgr_timer_s
 {
     ngx_path_t                  *path;
     ngx_stream_lua_main_conf_t  *lmcf;
+    ngx_stream_lua_srv_conf_t   *lscf;
     ngx_log_t                   *log;
     ngx_str_t                    src_name;
     ngx_msec_t                   timer_secs;
+    u_char                      *src_key;
 };
 
 extern ngx_module_t ngx_stream_lua_module;

@@ -301,7 +301,7 @@ static ngx_command_t  ngx_stream_lua_commands[] = {
 #endif  /* NGX_STREAM_SSL */
 
       { ngx_string("lua_mgr_timer"),
-      NGX_STREAM_MAIN_CONF|NGX_CONF_TAKE2,
+      NGX_STREAM_SRV_CONF|NGX_CONF_TAKE2,
       ngx_stream_lua_mgr_timer_by_lua,
       NGX_STREAM_MAIN_CONF_OFFSET,
       0,
